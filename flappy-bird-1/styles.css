@@ -1,0 +1,234 @@
+body {
+    padding: 0px;
+    margin: 0px;
+}
+
+.info {
+    display: none;
+}
+
+#a_canvas {
+    border: 1px solid black;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+}
+
+#social {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+}
+
+.intro #social,
+.gameOver #social {
+    display:inline;
+}
+
+.play #social {
+    display:none;
+}
+
+#social .fb {
+    display: block;
+    text-indent: -9999px;
+    background: url(fb.svg);
+    background-size: 100% 100%;
+    float: left;
+    margin: 0px 0px 0px 10px;
+}
+
+#social a {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+#social .ig {
+    display: block;
+    text-indent: -9999px;
+    background: url(ig.svg);
+    background-size: 100% 100%;
+    float: left;
+    margin: 0px 0px 0px 10px;
+}
+
+#social .sh {
+    display: block;
+    text-indent: -9999px;
+    background: url(sh.svg);
+    background-size: 100% 100%;
+    float: left;
+}
+
+html, body
+{
+    margin: 0;
+    padding: 0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline;
+}
+
+#UIViewPort
+{
+    margin-top: 300px;
+    width: 500px;
+    height:300px;
+    background: grey;
+    position: relative;
+    overflow: hidden;
+    display: none;
+}
+
+#UIBird
+{
+    width: 20px;
+    height:20px;
+    background: url(bird.png) no-repeat;
+    display: block;
+    position: absolute;
+}
+
+.debugInfo
+{
+    display: block;
+}
+
+.brick
+{
+    display: block;
+    position: absolute;
+    background: #F00;
+    width:20px;
+}
+
+
+@media only screen and (max-device-width: 480px) {
+    .mobile {
+        display: block;
+    }
+}
+
+
+@media screen and (orientation:landscape) {
+    body {
+        /*width: 960px;*/
+        /*width: 1500px;*/
+        /*background: #f3d284;*/
+        /*background: #fff;*/
+        /*overflow: hidden;*/
+    }
+    .portrait {
+        display: none;
+    }
+    .landscape {
+        display: block;
+    }
+}
+
+@media screen and (orientation:portrait) {
+    body {
+        /*width: 720px;*/
+        /*width: 100%;*/
+        /*background: #e25454;*/
+        /*background: #fff;*/
+        /*overflow: hidden;*/
+    }
+    .portrait {
+        display: block;
+    }
+    .landscape {
+        display: none;
+    }
+}
+
+
+article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section {
+    display: block;
+}
+.mobile {
+    display: none;
+}
+
+
+#pagewrap {
+    width: 980px;
+    margin: 0 auto;
+}
+#header {
+    height: 160px;
+}
+#content {
+    width: 600px;
+    float: left;
+}
+#sidebar {
+    width: 280px;
+    float: right;
+}
+#footer {
+    clear: both;
+}
+
+@media screen and (max-width: 980px) {
+    #pagewrap {
+        width: 95%;
+    }
+    #content {
+        width: 60%;
+        padding: 3% 4%;
+    }
+    #sidebar {
+        width: 30%;
+    }
+    #sidebar .widget {
+        padding: 8% 7%;
+        margin-bottom: 10px;
+    }
+}
+
+@media screen and (max-width: 650px) {
+    #header {
+        height: auto;
+    }
+    #searchform {
+        position: absolute;
+        top: 5px;
+        right: 0;
+    }
+    #main-nav {
+        position: static;
+    }
+    #site-logo {
+        margin: 15px 100px 5px 0;
+        position: static;
+    }
+    #site-description {
+        margin: 0 0 15px;
+        position: static;
+    }
+    #content {
+        width: auto;
+        float: none;
+        margin: 20px 0;
+    }
+    #sidebar {
+        width: 100%;
+        float: none;
+        margin: 0;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    html {
+        -webkit-text-size-adjust: none;
+    }
+    #main-nav a {
+        font-size: 90%;
+        padding: 10px 8px;
+    }
+    .mobile {
+        display: block;
+    }
+}
