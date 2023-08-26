@@ -30,3 +30,8 @@ export const protector: Sprite = {
     y: 40,
     w: SPRITE_WIDTH * 2
 };
+export const rocket: Sprite = {
+    x: 200,
+    y: 40,
+    w: SPRITE_WIDTH * 1
+};

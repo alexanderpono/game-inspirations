@@ -5,6 +5,7 @@ import { AbstractGraph } from '@src/game/Graph.types';
 import { GameFieldController, GameState, RenderOptions, UFO } from './Game.types';
 import { GRUFO } from '@src/ports/GRUFO';
 import { GRProtector } from '@src/ports/GRProtector';
+import { GRRocket } from '@src/ports/GRRocket';
 
 interface GameFieldUIProps {
     field: GameField;
@@ -46,6 +47,9 @@ export const GameFieldUI = React.forwardRef<HTMLCanvasElement, GameFieldUIProps>
                 GRUFO.create(context, ufo.screenXY, gameState.pic).draw();
             });
             GRProtector.create(context, gameState.protector.screenXY, gameState.pic).draw();
+            if (gameState.rocket.alive) {
+                GRRocket.create(context, gameState.rocket.screenXY, gameState.pic).draw();
+            }
         }, [gameState, canvas, picLoaded]);
 
         return (

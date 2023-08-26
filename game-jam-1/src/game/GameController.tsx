@@ -22,7 +22,7 @@ export class GameController {
     private graph: AbstractGraph = null;
     private gameField: GameField = null;
     private canvasW = 720;
-    private canvasH = 720;
+    private canvasH = 520;
     private canvasRef: React.RefObject<HTMLCanvasElement>;
 
     constructor(private map: string, private target: string, options: RenderOptions) {
@@ -51,7 +51,18 @@ export class GameController {
             const protector = this.getProtectorFromText(map);
 
             this.gameField = gameField;
-            this.gameState = { ...this.gameState, ufo, protector };
+            this.gameState = {
+                ...this.gameState,
+                ufo,
+                protector,
+                rocket: {
+                    alive: true,
+                    screenXY: {
+                        x: 307,
+                        y: 420
+                    }
+                }
+            };
 
             this.curPathPos = 0;
 
