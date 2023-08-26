@@ -59,12 +59,12 @@ export class SIMUFO extends SIMObject {
         };
 
         const ufoLU: Point2D = {
-            x: ufoState.screenXY.x - this.w2,
-            y: ufoState.screenXY.y - this.h2
+            x: ufoState.xy.x - this.w2,
+            y: ufoState.xy.y - this.h2
         };
         const ufoRD: Point2D = {
-            x: ufoState.screenXY.x + this.w2,
-            y: ufoState.screenXY.y + this.h2
+            x: ufoState.xy.x + this.w2,
+            y: ufoState.xy.y + this.h2
         };
 
         const hit =

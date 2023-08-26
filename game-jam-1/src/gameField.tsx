@@ -13,10 +13,10 @@ const map1 = `
 
 
 
-    u u u u u
+u u u u u
 
 
-       p
+p
                  ▓
 `;
 const MAP = { ...defaultRenderOptions, map: true };

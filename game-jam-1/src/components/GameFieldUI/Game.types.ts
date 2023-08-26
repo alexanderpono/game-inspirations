@@ -10,10 +10,10 @@ export interface GameState {
 }
 
 export const defaultProtector: Protector = {
-    screenXY: { x: 0, y: 0 }
+    xy: { x: 0, y: 0 }
 };
 export const defaultRocket: Rocket = {
-    screenXY: { x: 0, y: 0 },
+    xy: { x: 0, y: 0 },
     alive: false
 };
 export const defaultGameState: GameState = {
@@ -29,7 +29,7 @@ export const defaultRenderOptions: RenderOptions = {};
 
 export class UFO {
     constructor(public id: number) {}
-    screenXY: Point2D;
+    xy: Point2D;
 }
 
 export enum FieldChar {
@@ -39,9 +39,9 @@ export enum FieldChar {
 }
 
 export interface Protector {
-    screenXY: Point2D;
+    xy: Point2D;
 }
 export interface Rocket {
     alive: boolean;
-    screenXY: Point2D;
+    xy: Point2D;
 }

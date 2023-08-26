@@ -12,11 +12,11 @@ export class SIMRocket extends SIMObject {
     xy: Point2D = { ...defaultPoint2D };
     moveDXDY: Point2D = {
         x: 0,
-        y: -10
+        y: -30
     };
     moveTimeMS = 1000;
     nextCalcTime = 0;
-    calculationStep = 1000;
+    calculationStep = 200;
     speed: Point2D = { ...defaultPoint2D };
     lastCalcTime = 0;
 
@@ -44,6 +44,10 @@ export class SIMRocket extends SIMObject {
         actions: SimObjectActions,
         selectors: SimObjectSelectors
     ): boolean => {
+        const rocketAlive = selectors.rocketAlive();
+        if (!rocketAlive) {
+            return;
+        }
         if (simTime > this.nextCalcTime) {
             this.nextCalcTime = simTime + this.calculationStep;
             const xy = selectors.rocketXY();
@@ -51,6 +55,9 @@ export class SIMRocket extends SIMObject {
                 x: (xy.x += this.speed.x * (simTime - this.lastCalcTime)),
                 y: (xy.y += this.speed.y * (simTime - this.lastCalcTime))
             };
+            if (newxy.y < 0) {
+                actions.rocketOut();
+            }
             actions.rocketXY(newxy);
             this.lastCalcTime = simTime;
             console.log(

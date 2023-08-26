@@ -3,6 +3,7 @@ import { Point2D } from './GameField';
 
 export interface SimObjectActions {
     rocketXY: (xy: Point2D) => void;
+    rocketOut: () => void;
 }
 export interface SimObjectSelectors {
     rocketXY: () => Point2D;

@@ -44,11 +44,11 @@ export const GameFieldUI = React.forwardRef<HTMLCanvasElement, GameFieldUIProps>
 
             GRField.create(context, emptyField, gameState.pic).draw();
             gameState.ufo.forEach((ufo: UFO) => {
-                GRUFO.create(context, ufo.screenXY, gameState.pic).draw();
+                GRUFO.create(context, ufo.xy, gameState.pic).draw();
             });
-            GRProtector.create(context, gameState.protector.screenXY, gameState.pic).draw();
+            GRProtector.create(context, gameState.protector.xy, gameState.pic).draw();
             if (gameState.rocket.alive) {
-                GRRocket.create(context, gameState.rocket.screenXY, gameState.pic).draw();
+                GRRocket.create(context, gameState.rocket.xy, gameState.pic).draw();
             }
         }, [gameState, canvas, picLoaded]);
 

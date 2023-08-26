@@ -17,6 +17,8 @@ import { SPRITE_HEIGHT, SPRITE_WIDTH } from '@src/ports/GR.types';
 import { SIMRocket } from './SIMRocket';
 import { SIMObject } from './SIM.types';
 import { SIMUFO } from './SIMUFO';
+import { GRProtector } from '@src/ports/GRProtector';
+import { GRUFO } from '@src/ports/GRUFO';
 
 export class GameController {
     private gameState: GameState;
@@ -65,8 +67,8 @@ export class GameController {
                 protector,
                 rocket: {
                     alive: true,
-                    screenXY: {
-                        x: 307,
+                    xy: {
+                        x: protector.xy.x,
                         y: 420
                     }
                 }
@@ -82,10 +84,10 @@ export class GameController {
         this.simRocket = new SIMRocket();
         this.simObjects = [this.simRocket, ...ufos.map((ufo: UFO) => new SIMUFO(ufo.id))];
         this.simObjects.forEach((obj: SIMObject) => {
-            if (obj.type === 'SIMObject') {
+            if (obj.type === 'SIMRocket') {
                 return obj.onAdd(this.simTime, {
                     startXY: {
-                        x: 307,
+                        x: 0,
                         y: 420
                     }
                 });
@@ -132,10 +134,11 @@ export class GameController {
     patchState = (mixin: Partial<GameState>) => (this.gameState = { ...this.gameState, ...mixin });
     actions = {
         rocketXY: (xy: Point2D) =>
-            this.patchState({ rocket: { ...this.gameState.rocket, screenXY: { ...xy } } })
+            this.patchState({ rocket: { ...this.gameState.rocket, xy: { ...xy } } }),
+        rocketOut: () => this.patchState({ rocket: { ...this.gameState.rocket, alive: false } })
     };
     selectors = {
-        rocketXY: (): Point2D => this.gameState.rocket.screenXY,
+        rocketXY: (): Point2D => this.gameState.rocket.xy,
         ufo: (id: number): UFO => this.gameState.ufo.find((ufo) => ufo.id === id),
         rocketAlive: () => this.gameState.rocket.alive
     };
@@ -207,7 +210,7 @@ export class GameController {
             line.split('').forEach((char: string, x: number) => {
                 if (char === FieldChar.ufo) {
                     const ufo = new UFO(ufos.length + 1);
-                    ufo.screenXY = { x: x * SPRITE_WIDTH, y: y * SPRITE_HEIGHT };
+                    ufo.xy = GRUFO.toXY({ x: x * SPRITE_WIDTH, y: y * SPRITE_HEIGHT });
                     ufos.push(ufo);
                 }
             });
@@ -225,7 +228,7 @@ export class GameController {
             const fieldLine = Array(fieldWidth).fill(Cell.space);
             line.split('').forEach((char: string, x: number) => {
                 if (char === FieldChar.protector) {
-                    protector.screenXY = { x: x * SPRITE_WIDTH, y: y * SPRITE_HEIGHT };
+                    protector.xy = GRProtector.toXY({ x: x * SPRITE_WIDTH, y: y * SPRITE_HEIGHT });
                 }
             });
             return fieldLine;
