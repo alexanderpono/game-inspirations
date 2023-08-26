@@ -9,14 +9,16 @@ import {
     defaultGameState,
     defaultProtector
 } from '@src/components/GameFieldUI/Game.types';
-import { Cell, GameField } from './GameField';
+import { Cell, GameField, Point2D } from './GameField';
 import ImgSprite from '@src/components/GameFieldUI/sprite.png';
 import { GameFieldUI } from '@src/components/GameFieldUI/GameFieldUI';
 import { AbstractGraph } from './Graph.types';
 import { SPRITE_HEIGHT, SPRITE_WIDTH } from '@src/ports/GR.types';
+import { SIMObject, SIMRocket } from './SIMRocket';
 
 export class GameController {
     private gameState: GameState;
+    private lastRenderState: GameState = { ...defaultGameState };
     private picLoaded: boolean = false;
     private emptyField: GameField = GameField.create();
     private graph: AbstractGraph = null;
@@ -24,6 +26,10 @@ export class GameController {
     private canvasW = 720;
     private canvasH = 520;
     private canvasRef: React.RefObject<HTMLCanvasElement>;
+    private simObjects: SIMObject[];
+    private simRocket: SIMRocket = null;
+    private simTime: number = 0;
+    private simStartTime: number = 0;
 
     constructor(private map: string, private target: string, options: RenderOptions) {
         this.gameState = {
@@ -67,13 +73,28 @@ export class GameController {
             this.curPathPos = 0;
 
             this.renderUI();
+            this.startSimulation();
         });
     }
-
-    renderUI = (): Promise<boolean> => {
-        return new Promise((resolve) => {
-            render(this.getUI(), document.getElementById(this.target));
+    startSimulation = () => {
+        this.simRocket = new SIMRocket();
+        this.simObjects = [this.simRocket];
+        this.simRocket.onAdd(this.simTime, {
+            startXY: {
+                x: 307,
+                y: 420
+            }
         });
+        this.simStartTime = Date.now();
+        this.simObjects.forEach((obj: SIMObject) => {
+            obj.onStart(this.simTime, this.actions, this.selectors);
+        });
+        this.simulationTick();
+    };
+
+    renderUI = () => {
+        render(this.getUI(), document.getElementById(this.target));
+        this.lastRenderState = this.gameState;
     };
 
     getUI = () => (
@@ -102,32 +123,36 @@ export class GameController {
     };
 
     patchState = (mixin: Partial<GameState>) => (this.gameState = { ...this.gameState, ...mixin });
+    actions = {
+        rocketXY: (xy: Point2D) =>
+            this.patchState({ rocket: { ...this.gameState.rocket, screenXY: { ...xy } } })
+    };
+    selectors = {
+        rocketXY: (): Point2D => this.gameState.rocket.screenXY
+    };
 
     stepNo = 0;
     maxMiniCounter = 9;
     curPathPos = 0;
     manVIndex: number;
     nextManVIndex: number;
-    tick = () => {
-        if ((this.gameState.miniCounter + 1) % 10 === 0) {
-            if (this.curPathPos < this.graph.cheapestPath.length) {
-                this.curPathPos++;
-                this.stepNo++;
-            }
-            this.manVIndex = this.nextManVIndex;
-            this.renderUI();
-        } else {
-            this.renderUI();
-        }
-        if (this.stepNo < this.graph.cheapestPath.length) {
-            setTimeout(() => this.tick(), 25);
-        } else {
+    simulationTick = () => {
+        const simStep = 100;
+        this.simTime = Date.now() - this.simStartTime;
+        this.simObjects.forEach((obj: SIMObject) => {
+            obj.onSIMTimer(this.simTime, this.actions, this.selectors);
+        });
+
+        const stateChanged = this.gameState !== this.lastRenderState;
+        if (stateChanged) {
+            console.log('simulationTick() stateChanged its timeto render');
             this.renderUI();
         }
+
+        setTimeout(() => this.simulationTick(), simStep);
     };
 
     getFieldWidth = (lines: string[]): number => {
-        // const lines = text.trim().split('\n');
         const fieldWidth = lines.reduce(
             (width: number, line) => (line.length < width ? width : line.length),
             0
@@ -163,9 +188,7 @@ export class GameController {
             const fieldLine = Array(fieldWidth).fill(Cell.space);
             line.split('').forEach((char: string, x: number) => {
                 if (char === FieldChar.protector) {
-                    // const protecto = new UFO();
                     protector.screenXY = { x: x * SPRITE_WIDTH, y: y * SPRITE_HEIGHT };
-                    // ufos.push(ufo);
                 }
             });
             return fieldLine;
