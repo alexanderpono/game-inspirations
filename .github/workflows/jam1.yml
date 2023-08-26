@@ -37,12 +37,12 @@ jobs:
         id: Project-build
         run: npm run build
 
-      - name: Deploy application to GHP /game-inspirations/game-jam1/app 🚀
+      - name: Deploy application to GHP /game-inspirations/game-jam-1/app 🚀
         id: Deploy-app
         uses: JamesIves/github-pages-deploy-action@3.7.1
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           BRANCH: gh-pages # The branch the action should deploy to.
-          FOLDER: game-jam1/dist  # The folder the action should deploy.
-          TARGET_FOLDER: game-inspirations/game-jam1/app
+          FOLDER: game-jam-1/dist  # The folder the action should deploy.
+          TARGET_FOLDER: game-inspirations/game-jam-1/app
           CLEAN: true # Automatically remove deleted files from the deploy branch
