@@ -14,7 +14,9 @@ import ImgSprite from '@src/components/GameFieldUI/sprite.png';
 import { GameFieldUI } from '@src/components/GameFieldUI/GameFieldUI';
 import { AbstractGraph } from './Graph.types';
 import { SPRITE_HEIGHT, SPRITE_WIDTH } from '@src/ports/GR.types';
-import { SIMObject, SIMRocket } from './SIMRocket';
+import { SIMRocket } from './SIMRocket';
+import { SIMObject } from './SIM.types';
+import { SIMUFO } from './SIMUFO';
 
 export class GameController {
     private gameState: GameState;
@@ -73,17 +75,22 @@ export class GameController {
             this.curPathPos = 0;
 
             this.renderUI();
-            this.startSimulation();
+            this.startSimulation(ufo);
         });
     }
-    startSimulation = () => {
+    startSimulation = (ufos: UFO[]) => {
         this.simRocket = new SIMRocket();
-        this.simObjects = [this.simRocket];
-        this.simRocket.onAdd(this.simTime, {
-            startXY: {
-                x: 307,
-                y: 420
+        this.simObjects = [this.simRocket, ...ufos.map((ufo: UFO) => new SIMUFO(ufo.id))];
+        this.simObjects.forEach((obj: SIMObject) => {
+            if (obj.type === 'SIMObject') {
+                return obj.onAdd(this.simTime, {
+                    startXY: {
+                        x: 307,
+                        y: 420
+                    }
+                });
             }
+            return obj.onAdd(this.simTime, {});
         });
         this.simStartTime = Date.now();
         this.simObjects.forEach((obj: SIMObject) => {
@@ -128,7 +135,37 @@ export class GameController {
             this.patchState({ rocket: { ...this.gameState.rocket, screenXY: { ...xy } } })
     };
     selectors = {
-        rocketXY: (): Point2D => this.gameState.rocket.screenXY
+        rocketXY: (): Point2D => this.gameState.rocket.screenXY,
+        ufo: (id: number): UFO => this.gameState.ufo.find((ufo) => ufo.id === id),
+        rocketAlive: () => this.gameState.rocket.alive
+    };
+    events = {
+        ufoRocketCollide: (ufoId: number) => {
+            console.error('ufoRocketCollide() ufoId=', ufoId);
+            const ufoStateIndex = this.gameState.ufo.findIndex((ufo) => ufo.id === ufoId);
+            if (ufoStateIndex === -1) {
+                console.error('ufoRocketCollide() cannot find STATE ufo', ufoId);
+                return;
+            }
+            const ufoSimIndex = this.simObjects.findIndex((obj: SIMObject) => {
+                if (obj.type !== 'SIMUFO') {
+                    return false;
+                }
+                return (obj as SIMUFO).UFOID === ufoId;
+            });
+            if (ufoSimIndex === -1) {
+                console.error('ufoRocketCollide() cannot find SIM ufo', ufoId);
+                return;
+            }
+            this.simObjects.splice(ufoSimIndex, 1);
+            this.patchState({
+                rocket: { ...this.gameState.rocket, alive: false },
+                ufo: [
+                    ...this.gameState.ufo.slice(0, ufoStateIndex),
+                    ...this.gameState.ufo.slice(ufoStateIndex + 1)
+                ]
+            });
+        }
     };
 
     stepNo = 0;
@@ -140,7 +177,7 @@ export class GameController {
         const simStep = 100;
         this.simTime = Date.now() - this.simStartTime;
         this.simObjects.forEach((obj: SIMObject) => {
-            obj.onSIMTimer(this.simTime, this.actions, this.selectors);
+            obj.onSIMTimer(this.simTime, this.actions, this.selectors, this.events);
         });
 
         const stateChanged = this.gameState !== this.lastRenderState;
@@ -169,7 +206,7 @@ export class GameController {
             const fieldLine = Array(fieldWidth).fill(Cell.space);
             line.split('').forEach((char: string, x: number) => {
                 if (char === FieldChar.ufo) {
-                    const ufo = new UFO();
+                    const ufo = new UFO(ufos.length + 1);
                     ufo.screenXY = { x: x * SPRITE_WIDTH, y: y * SPRITE_HEIGHT };
                     ufos.push(ufo);
                 }

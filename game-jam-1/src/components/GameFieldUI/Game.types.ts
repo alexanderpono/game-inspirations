@@ -28,6 +28,7 @@ export interface RenderOptions {}
 export const defaultRenderOptions: RenderOptions = {};
 
 export class UFO {
+    constructor(public id: number) {}
     screenXY: Point2D;
 }
 

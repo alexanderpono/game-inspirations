@@ -1,24 +1,13 @@
 import { Point2D, defaultPoint2D } from './GameField';
-
-interface SimObjectActions {
-    rocketXY: (xy: Point2D) => void;
-}
-interface SimObjectSelectors {
-    rocketXY: () => Point2D;
-}
-
-export interface SIMObject {
-    onAdd(simTime: number, data): void;
-    onStart(simTime: number, actions: SimObjectActions, selectors: SimObjectSelectors): void;
-    onSIMTimer(simTime: number, actions: SimObjectActions, selectors: SimObjectSelectors): boolean;
-}
+import { SIMObject, SimObjectActions, SimObjectSelectors } from './SIM.types';
 
 export enum RocketStateID {
     DEFAULT = '',
     DEAD = 'DEAD',
     ALIVE = 'ALIVE'
 }
-export class SIMRocket implements SIMObject {
+export class SIMRocket extends SIMObject {
+    type = 'SIMRocket';
     state: RocketStateID = RocketStateID.DEFAULT;
     xy: Point2D = { ...defaultPoint2D };
     moveDXDY: Point2D = {
