@@ -6,6 +6,7 @@ console.log('gameField!');
 
 const map1 = `
 ▓                
+   u u u u u
 
 
 
@@ -15,8 +16,7 @@ const map1 = `
 
 
 
-
-
+       p
                  ▓
 `;
 const MAP = { ...defaultRenderOptions, map: true };

@@ -2,7 +2,9 @@ import { GameField } from '@src/game/GameField';
 import React from 'react';
 import { GRField } from '@src/ports/GRField';
 import { AbstractGraph } from '@src/game/Graph.types';
-import { GameFieldController, GameState, RenderOptions } from './Game.types';
+import { GameFieldController, GameState, RenderOptions, UFO } from './Game.types';
+import { GRUFO } from '@src/ports/GRUFO';
+import { GRProtector } from '@src/ports/GRProtector';
 
 interface GameFieldUIProps {
     field: GameField;
@@ -40,6 +42,10 @@ export const GameFieldUI = React.forwardRef<HTMLCanvasElement, GameFieldUIProps>
             const options: RenderOptions = {};
 
             GRField.create(context, emptyField, gameState.pic).draw();
+            gameState.ufo.forEach((ufo: UFO) => {
+                GRUFO.create(context, ufo.screenXY, gameState.pic).draw();
+            });
+            GRProtector.create(context, gameState.protector.screenXY, gameState.pic).draw();
         }, [gameState, canvas, picLoaded]);
 
         return (

@@ -21,11 +21,11 @@ export const putSprite_ = (
         pic,
         sprite.x,
         sprite.y,
-        SPRITE_WIDTH,
+        sprite.w,
         SPRITE_HEIGHT,
         screenX,
         screenY,
-        SPRITE_WIDTH,
+        sprite.w,
         SPRITE_HEIGHT
     );
 };

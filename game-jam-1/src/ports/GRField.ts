@@ -1,5 +1,5 @@
 import { Cell, GameField } from '@src/game/GameField';
-import { Sprite, gold, man, space, stairs, wall } from '@src/ports/GR.types';
+import { Sprite, space } from '@src/ports/GR.types';
 import { putSprite } from '@src/ports/GR.lib';
 
 export class GRField {
@@ -13,18 +13,6 @@ export class GRField {
         this.field.field.forEach((line: Cell[], y: number) => {
             line.forEach((cell: Cell, x: number) => {
                 let sprite: Sprite = space;
-                if (cell === Cell.wall) {
-                    sprite = wall;
-                }
-                if (cell === Cell.stairs) {
-                    sprite = stairs;
-                }
-                if (cell === Cell.man) {
-                    sprite = man;
-                }
-                if (cell === Cell.gold) {
-                    sprite = gold;
-                }
                 putSprite(this.context, this.pic, sprite, x, y);
             });
         });

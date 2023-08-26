@@ -1,10 +1,19 @@
 import React from 'react';
 import { render } from 'react-dom';
-import { GameState, RenderOptions, defaultGameState } from '@src/components/GameFieldUI/Game.types';
-import { GameField } from './GameField';
+import {
+    FieldChar,
+    GameState,
+    Protector,
+    RenderOptions,
+    UFO,
+    defaultGameState,
+    defaultProtector
+} from '@src/components/GameFieldUI/Game.types';
+import { Cell, GameField } from './GameField';
 import ImgSprite from '@src/components/GameFieldUI/sprite.png';
 import { GameFieldUI } from '@src/components/GameFieldUI/GameFieldUI';
 import { AbstractGraph } from './Graph.types';
+import { SPRITE_HEIGHT, SPRITE_WIDTH } from '@src/ports/GR.types';
 
 export class GameController {
     private gameState: GameState;
@@ -37,9 +46,12 @@ export class GameController {
             this.emptyField = field;
 
             const gameField = GameField.create().initFromText(map);
+            const ufo = this.getUFOFromText(map);
+
+            const protector = this.getProtectorFromText(map);
 
             this.gameField = gameField;
-            this.gameState = { ...this.gameState };
+            this.gameState = { ...this.gameState, ufo, protector };
 
             this.curPathPos = 0;
 
@@ -101,5 +113,52 @@ export class GameController {
         } else {
             this.renderUI();
         }
+    };
+
+    getFieldWidth = (lines: string[]): number => {
+        // const lines = text.trim().split('\n');
+        const fieldWidth = lines.reduce(
+            (width: number, line) => (line.length < width ? width : line.length),
+            0
+        );
+        return fieldWidth;
+    };
+
+    getUFOFromText = (text: string): UFO[] => {
+        const lines = text.trim().split('\n');
+        const fieldWidth = this.getFieldWidth(lines);
+
+        const ufos: UFO[] = [];
+        lines.forEach((line: string, y: number) => {
+            const fieldLine = Array(fieldWidth).fill(Cell.space);
+            line.split('').forEach((char: string, x: number) => {
+                if (char === FieldChar.ufo) {
+                    const ufo = new UFO();
+                    ufo.screenXY = { x: x * SPRITE_WIDTH, y: y * SPRITE_HEIGHT };
+                    ufos.push(ufo);
+                }
+            });
+            return fieldLine;
+        });
+        return ufos;
+    };
+
+    getProtectorFromText = (text: string): Protector => {
+        const lines = text.trim().split('\n');
+        const fieldWidth = this.getFieldWidth(lines);
+
+        const protector = defaultProtector;
+        lines.forEach((line: string, y: number) => {
+            const fieldLine = Array(fieldWidth).fill(Cell.space);
+            line.split('').forEach((char: string, x: number) => {
+                if (char === FieldChar.protector) {
+                    // const protecto = new UFO();
+                    protector.screenXY = { x: x * SPRITE_WIDTH, y: y * SPRITE_HEIGHT };
+                    // ufos.push(ufo);
+                }
+            });
+            return fieldLine;
+        });
+        return protector;
     };
 }
