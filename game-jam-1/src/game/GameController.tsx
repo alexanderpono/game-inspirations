@@ -69,15 +69,15 @@ export class GameController {
                     alive: true,
                     xy: {
                         x: protector.xy.x,
-                        y: 420
+                        y: protector.xy.y - 10
                     },
                     collideBoxLU: {
                         x: protector.xy.x,
-                        y: 420
+                        y: protector.xy.y
                     },
                     collideBoxRD: {
                         x: protector.xy.x,
-                        y: 420
+                        y: protector.xy.y
                     }
                 }
             };

@@ -3,7 +3,7 @@ import { putSprite_ } from './GR.lib';
 import { Point2D } from '@src/game/GameField';
 
 const simXYToScreenXY: Point2D = {
-    x: -SPRITE_WIDTH + 4,
+    x: -SPRITE_WIDTH,
     y: -SPRITE_HEIGHT / 2
 };
 
