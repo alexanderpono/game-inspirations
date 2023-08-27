@@ -6,8 +6,8 @@ export enum RocketStateID {
     DEAD = 'DEAD',
     ALIVE = 'ALIVE'
 }
-const collideBoxLU: Point2D = { x: -3, y: -20 };
-const collideBoxRD: Point2D = { x: 3, y: 20 };
+const collideBoxLU: Point2D = { x: -3, y: -18 };
+const collideBoxRD: Point2D = { x: 3, y: 0 };
 export class SIMRocket extends SIMObject {
     type = 'SIMRocket';
     state: RocketStateID = RocketStateID.DEFAULT;

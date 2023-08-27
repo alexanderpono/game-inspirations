@@ -6,11 +6,12 @@ export enum UFOStateID {
     DEFAULT = '',
     ALIVE = 'ALIVE'
 }
+const collideBoxLU: Point2D = { x: -25, y: -20 };
+const collideBoxRD: Point2D = { x: 25, y: 8 };
+
 export class SIMUFO extends SIMObject {
     type = 'SIMUFO';
     state: UFOStateID = UFOStateID.DEFAULT;
-    private rw2 = rocket.w / 2;
-    private rh2 = rocket.h / 2;
     private w2 = ufo.w / 2;
     private h2 = ufo.h / 2;
 
@@ -49,12 +50,12 @@ export class SIMUFO extends SIMObject {
         };
 
         const ufoLU: Point2D = {
-            x: ufoState.xy.x - this.w2,
-            y: ufoState.xy.y - this.h2
+            x: ufoState.xy.x + collideBoxLU.x,
+            y: ufoState.xy.y + collideBoxLU.y
         };
         const ufoRD: Point2D = {
-            x: ufoState.xy.x + this.w2,
-            y: ufoState.xy.y + this.h2
+            x: ufoState.xy.x + collideBoxRD.x,
+            y: ufoState.xy.y + collideBoxRD.y
         };
 
         const hit =
