@@ -32,30 +32,20 @@ export class SIMUFO extends SIMObject {
             return;
         }
         const ufoState = selectors.ufo(this.UFOID);
-        const rocketXY = selectors.rocketXY();
         if (typeof ufoState === 'undefined') {
             console.log('cannot find at state ufo with id=', this.UFOID);
             return;
         }
-        const rocketMinX = rocketXY.x - this.rw2;
-        const rocketMaxX = rocketXY.x + this.rw2;
-        const rocketMinY = rocketXY.y - this.rh2;
-        const rocketMaxY = rocketXY.y + this.rh2;
-        const rocketLU: Point2D = {
-            x: rocketMinX,
-            y: rocketMinY
-        };
+        const rocketLU = selectors.rocketCollideBoxLU();
+        const rocketRD = selectors.rocketCollideBoxRD();
+
         const rocketLD: Point2D = {
-            x: rocketMinX,
-            y: rocketMaxY
-        };
-        const rocketRD: Point2D = {
-            x: rocketMaxX,
-            y: rocketMaxY
+            x: rocketLU.x,
+            y: rocketRD.y
         };
         const rocketRU: Point2D = {
-            x: rocketMaxX,
-            y: rocketMinY
+            x: rocketRD.x,
+            y: rocketLU.y
         };
 
         const ufoLU: Point2D = {

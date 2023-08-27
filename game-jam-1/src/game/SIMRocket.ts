@@ -6,6 +6,8 @@ export enum RocketStateID {
     DEAD = 'DEAD',
     ALIVE = 'ALIVE'
 }
+const collideBoxLU: Point2D = { x: -3, y: -20 };
+const collideBoxRD: Point2D = { x: 3, y: 20 };
 export class SIMRocket extends SIMObject {
     type = 'SIMRocket';
     state: RocketStateID = RocketStateID.DEFAULT;
@@ -59,6 +61,18 @@ export class SIMRocket extends SIMObject {
                 actions.rocketOut();
             }
             actions.rocketXY(newxy);
+
+            const curCollideBoxLU: Point2D = {
+                x: newxy.x + collideBoxLU.x,
+                y: newxy.y + collideBoxLU.y
+            };
+            const curCollideBoxRD: Point2D = {
+                x: newxy.x + collideBoxRD.x,
+                y: newxy.y + collideBoxRD.y
+            };
+            actions.rocketCollideBoxLU(curCollideBoxLU);
+            actions.rocketCollideBoxRD(curCollideBoxRD);
+
             this.lastCalcTime = simTime;
             console.log(
                 'SIMRocket:onSIMTimer() time to calculate simTime=',

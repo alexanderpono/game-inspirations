@@ -70,6 +70,14 @@ export class GameController {
                     xy: {
                         x: protector.xy.x,
                         y: 420
+                    },
+                    collideBoxLU: {
+                        x: protector.xy.x,
+                        y: 420
+                    },
+                    collideBoxRD: {
+                        x: protector.xy.x,
+                        y: 420
                     }
                 }
             };
@@ -135,12 +143,18 @@ export class GameController {
     actions = {
         rocketXY: (xy: Point2D) =>
             this.patchState({ rocket: { ...this.gameState.rocket, xy: { ...xy } } }),
-        rocketOut: () => this.patchState({ rocket: { ...this.gameState.rocket, alive: false } })
+        rocketOut: () => this.patchState({ rocket: { ...this.gameState.rocket, alive: false } }),
+        rocketCollideBoxLU: (xy: Point2D) =>
+            this.patchState({ rocket: { ...this.gameState.rocket, collideBoxLU: { ...xy } } }),
+        rocketCollideBoxRD: (xy: Point2D) =>
+            this.patchState({ rocket: { ...this.gameState.rocket, collideBoxRD: { ...xy } } })
     };
     selectors = {
         rocketXY: (): Point2D => this.gameState.rocket.xy,
         ufo: (id: number): UFO => this.gameState.ufo.find((ufo) => ufo.id === id),
-        rocketAlive: () => this.gameState.rocket.alive
+        rocketAlive: () => this.gameState.rocket.alive,
+        rocketCollideBoxLU: (): Point2D => this.gameState.rocket.collideBoxLU,
+        rocketCollideBoxRD: (): Point2D => this.gameState.rocket.collideBoxRD
     };
     events = {
         ufoRocketCollide: (ufoId: number) => {

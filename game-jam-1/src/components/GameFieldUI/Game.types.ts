@@ -14,7 +14,9 @@ export const defaultProtector: Protector = {
 };
 export const defaultRocket: Rocket = {
     xy: { x: 0, y: 0 },
-    alive: false
+    alive: false,
+    collideBoxLU: { x: 0, y: 0 },
+    collideBoxRD: { x: 0, y: 0 }
 };
 export const defaultGameState: GameState = {
     pic: null,
@@ -44,4 +46,6 @@ export interface Protector {
 export interface Rocket {
     alive: boolean;
     xy: Point2D;
+    collideBoxLU: Point2D;
+    collideBoxRD: Point2D;
 }
