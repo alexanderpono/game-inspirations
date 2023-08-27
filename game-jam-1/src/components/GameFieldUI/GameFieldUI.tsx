@@ -31,10 +31,8 @@ export const GameFieldUI = React.forwardRef<HTMLCanvasElement, GameFieldUIProps>
                 return;
             }
             const context = canvas.getContext('2d') as CanvasRenderingContext2D;
-            context.fillStyle = 'orange';
-            context.strokeStyle = '#FF0000';
-            context.lineWidth = 3;
-            context.strokeRect(0, 0, canvas.width, canvas.height);
+            context.fillStyle = '#000';
+            context.fillRect(0, 0, canvas.width, canvas.height);
 
             if (canvas === null || context === null) {
                 return;
@@ -42,7 +40,6 @@ export const GameFieldUI = React.forwardRef<HTMLCanvasElement, GameFieldUIProps>
 
             const options: RenderOptions = {};
 
-            GRField.create(context, emptyField, gameState.pic).draw();
             gameState.ufo.forEach((ufo: UFO) => {
                 GRUFO.create(context, ufo.xy, gameState.pic).draw();
             });
